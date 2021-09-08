@@ -1,9 +1,13 @@
-using Microsoft.OpenApi.Models;
+using CoinJar.Services;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
+builder.Services.AddSingleton<ICoinJar, CoinJar.Services.CoinJar>();
 builder.Services.AddControllers();
 builder.Services.AddSwaggerGen(c =>
 {
