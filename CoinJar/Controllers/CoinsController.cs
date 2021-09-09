@@ -1,5 +1,7 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.Data;
+using System.Threading.Tasks;
 using CoinJar.Models;
 using CoinJar.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -22,33 +24,57 @@ namespace CoinJar.Controllers
 
         // GET api/<CoinsController>/5
         [HttpGet("GetTotalAmount")]
-        public decimal GetTotalAmount()
+        public async Task<IActionResult> GetTotalAmount()
         {
-            return _coinJar.GetTotalAmount();
+            return Ok(_coinJar.GetTotalAmount());
         }
 
         // POST api/<CoinsController>
-        [HttpPost]
-        public ActionResult Add(Coin coin)
+        [HttpPost("AddCoin")]
+        public async Task<IActionResult> Add([Required]CoinType coinType)
         {
-            try
+            var coin = new Coin();
+            switch (coinType)
             {
-                _coinJar.AddCoin(coin);
+                case CoinType.Cent:
+                    coin.Volume = 0.146494146M;
+                    coin.Amount = 0.01M;
+                    break;
+                case CoinType.Nickel:
+                    coin.Volume = 0.232971432M;
+                    coin.Amount = 0.05M;
+                    break;
+                case CoinType.Dime:
+                    coin.Volume = 0.11500366M;
+                    coin.Amount = 0.1M;
+                    break;
+                case CoinType.Quarter:
+                    coin.Volume = 0.27353088M;
+                    coin.Amount = 0.25M;
+                    break;
+                case CoinType.Half:
+                    coin.Volume = 0.534997608M;
+                    coin.Amount = 0.5M;
+                    break;
+                case CoinType.Dollar:
+                    coin.Volume = 0.372718229M;
+                    coin.Amount = 1.0M;
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(coinType), coinType, null);
             }
-            catch (ConstraintException e)
-            {
-                return Ok(e.Message);
-            }
+            _coinJar.AddCoin(coin);
 
             return Ok();
         }
 
         // PUT api/<CoinsController>/5
         [HttpPut("Reset")]
-        public void Reset()
+        public async Task<IActionResult> Reset()
         {
             _coinJar.Reset();
+            return Ok();
         }
-    
+
     }
 }
