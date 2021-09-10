@@ -1,6 +1,6 @@
 # CoinJar API
 
-## How to use
+## How to use the CoinJar API
 - Clone the repository to your local machine.
 - Open *CoinJar.sln* in Visual Studio and run the project.
 - Your browser will open with the API endpoints from where you can Add Coins, Get the Total Balance or Reset the balance.  
